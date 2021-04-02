@@ -93,7 +93,7 @@ class Name(Expr):
         Expr.__init__(self, string)
         self.string = string
 
-    def eval(self, env):
+    def eval(self, env: dict):
         """
         >>> env = {
         ...     'a': Number(1),
@@ -110,6 +110,10 @@ class Name(Expr):
         Exception raised!
         """
         "*** YOUR CODE HERE ***"
+        if self.string in env:
+            return env[self.string]
+        else:
+            raise NameError("No variable named %s" % self.string)
 
     def __str__(self):
         return self.string
@@ -176,6 +180,8 @@ class CallExpr(Expr):
         Number(14)
         """
         "*** YOUR CODE HERE ***"
+        fn, arg = self.operator.eval(env), [i.eval(env) for i in self.operands]
+        return fn.apply(arg)
 
     def __str__(self):
         function = str(self.operator)
